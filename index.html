@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Solar Monster Tracking</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+    crossorigin="anonymous">
+
+</head>
+
+<body>
+
+  <div class="container">
+
+    <br>
+
+    <!-- Jumbotron -->
+    <div class="jumbotron" style="background-color: black; color: white;">
+      <h2 class="text-center" style="background-color: black; color: white;">Solar Sales Monster Tracking</h2>
+      <h4 class="text-center" style="background-color: black; color: white;">A Solar Sales Monster Solution &trade;</h4>
+    </div>
+    <div class="row">
+
+      <!-- Sign-Up Card-->
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h4>Add New Customer</h4>
+          </div>
+          <div class="card-body">
+
+            <!-- Sign-up Form (note the various input "types")-->
+            <form role="form">
+              <div class="form-group">
+                <label for="name-input">Customer Name:</label>
+                <input class="form-control" id="name-input" type="text">
+              </div>
+              <div class="form-group">
+                <label for="install-input">Install Details:</label>
+                <input class="form-control" id="install-input" type="text">
+              </div>
+              <div class="form-group">
+                <label for="date-input">Install Date:</label>
+                <input class="form-control" id="date-input" type="date">
+              </div>
+              <div class="form-group">
+                <label for="rate-input">Monthly Rate:</label>
+                <input class="form-control" id="rate-input" type="number">
+              </div>
+              <button class="btn btn-default" id="add-user" type="submit">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    <!-- Most Recent Member Card -->
+      <!-- <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            Current Employees
+          </div>
+          <div class="card-body" id="recent-member">
+            <h2 id="name-display">Jimmy John</h2>
+            <h4 id="role-display">Role: CEO</h4>
+            <h4 id="date-display">Date: 09/08/2018</h4>
+            <p id="rate-display">Rate: 1,000</p>
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="col-lg-12">
+        <div class="table">
+            Current Employees
+          </div>
+          <div class="card-body" id="recent-member">
+            <table>
+                <tr>
+                  <th>Employee Name</th>
+                  <th>Role</th>
+                  <th>Date</th>
+                  <th>Rate</th>
+                </tr>
+                <tr>
+                  <td id="name-display"></td>
+                  <td id="role-display"></td>
+                  <td id="date-display"></td>
+                  <td id="rate-display"></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </table>
+          </div>
+        </div> -->
+<!-- 
+        <table id="myTable" class="table table-dark">
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Role</th>
+                <th scope="col">Date</th>
+                <th scope="col">Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"></th>
+                <td id="name-display">Mark</td>
+                <td id="role-display">CEO</td>
+                <td id="date-display">Otto</td>
+                <td id="rate-display">1,000</td>
+                <td id="date-added-display">...</td>
+              </tr>
+            </tbody>
+          </table> -->
+
+          <hr style="margin-top: 1em;">
+
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 style="margin-top: 1em;">Customer Tracking</h4>
+              </div>
+              <div class="card-body">
+                <div id="full-member-list"></div>
+              </div>
+            </div>
+        </div>
+
+
+    </div>
+
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!-- LINK TO FIREBASE GOES HERE -->
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+
+  <!-- Script -->
+  <script>
+    //  START CODING BELOW!!
+
+    // Initialize Firebase
+
+  
+    // Create a variable to reference the database
+    var config = {
+  apiKey: "AIzaSyA8szUs4LVgCSG8qKefkBnd4cJ2KpHkRPY",
+  authDomain: "cactus-pete.firebaseapp.com",
+  databaseURL: "https://cactus-pete.firebaseio.com",
+  projectId: "cactus-pete",
+  storageBucket: "cactus-pete.appspot.com",
+  messagingSenderId: "942464371547"
+};
+
+  firebase.initializeApp(config);
+
+  var database = firebase.database();
+
+  var name = "";
+  var role = "";
+  var date = 0;
+  var rate = 0;
+
+    // Capture Button Click
+    $("#add-user").on("click", function(event) {
+      // Don't refresh the page!
+      event.preventDefault();
+
+    name = $("#name-input").val().trim();
+    role = $("#install-input").val().trim();
+    date = $("#date-input").val().trim();
+    rate = $("#rate-input").val().trim();
+
+     database.ref().push({
+        name: name,
+        role: role,
+        date: date,
+        rate: rate,
+        dateAdded: firebase.database.ServerValue.TIMESTAMP
+      });
+    });
+
+database.ref().on("child_added", function(childsnapshot) {
+
+  console.log(childsnapshot.val());
+  console.log(childsnapshot.val().name);
+  console.log(childsnapshot.val().role);
+  console.log(childsnapshot.val().date);
+  console.log(childsnapshot.val().rate);
+  console.log(childsnapshot.val().dateAdded);
+
+  $("#full-member-list").append("<div class='well'><span class='member-name'> " +
+        childsnapshot.val().name + " | " +
+        " </span><span class='member-role'> " + childsnapshot.val().role + " | " +
+        " </span><span class='member-date'> " + childsnapshot.val().date + " | " +
+        " </span><span class='member-rate'> " + childsnapshot.val().rate +
+        " </span></div>");
+
+
+
+// $("#full-member-list").append(childsnapshot.val().name + " | " + childsnapshot.val().role + " | " + childsnapshot.val().date + " |" + childsnapshot.val().rate); 
+
+// $("#name-display").append(childsnapshot.val().name);
+// $("#role-display").append(childsnapshot.val().role);
+// $("#date-display").append(childsnapshot.val().date);
+// $("#rate-display").append(childsnapshot.val().rate);
+// $("#data-added-display").append(childsnapshot.val().dateAdded)
+
+//should have grabed individual IDs
+
+// If any errors are experienced, log them to console.
+}, function(errorObject) {
+console.log("The read failed: " + errorObject.code);
+});
+
+dataRef.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
+      // Change the HTML to reflect
+      $("#name-display").text(snapshot.val().name);
+      $("#role-display").text(snapshot.val().role);
+      $("#date-display").text(snapshot.val().date);
+      $("#rate-display").text(snapshot.val().rate);
+    });
+
+  </script>
+
+</body>
+
+</html>
+
+
+
+<!-- name = childsnapshot.val().name
+name = parseINTchildsnapshot.val().name -->
